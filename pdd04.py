@@ -1,27 +1,15 @@
-N, M = [int(_) for _ in input().split()]
+n, m = [int(_) for _ in input().split()]
+
 nums = []
-for _ in range(M):
-    nums.append(int(input()))
+nm = m
+for _ in range(n):
+    nums.append([int(_) for _ in input().split()])
+    if nums[0] < 0:
+        nm -= nums[0]
 
-from itertools import combinations
-
-
-def gcd(a, b):
-    return a if b == 0 else gcd(b, a % b)
-
-
-def lcm(*nums):
-    if len(nums) == 1:
-        return nums[0]
-    if len(nums) == 2:
-        return nums[0] * nums[1] // gcd(nums[0], nums[1])
-    return lcm(lcm(*nums[:-1]), nums[-1])
-
-ans = 0
-for k in range(M):
-    perms = combinations(nums, k + 1)
-    s = 0
-    for perm in perms:
-        s += N // lcm(*perm)
-    ans += (-1) ** k * s
-print(ans)
+nums.sort(reverse=True)
+dp = [[0] * (m+1) for _ in range(n+1)]
+for i in range(1, n + 1):
+    if nums[0] > 0:
+        for j in range(nums[i][0], nm + 1):
+            dp[i][j]=max(dp[i-1][j],dp[i-1][j-nums[i][0]])
