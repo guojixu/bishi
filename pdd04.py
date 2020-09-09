@@ -33,3 +33,19 @@ def kmp(mom_string, son_string):
         pos1.append(m - s)
     pos1.append(-1)
     return pos1
+
+
+k = int(input())
+pat1 = "".join(input().strip().split())
+pat2 = "".join(input().strip().split())
+n = int(input())
+st1 = "".join(input().strip().split())
+st2 = "".join(input().strip().split())
+
+pos11 = kmp(st1, pat1)
+pos22 = kmp(st2, pat2)
+k = [i for i in pos11 if i in pos22 and i != -1]
+if len(k) == 0:
+    print(0)
+else:
+    print(k[0] + 1)
