@@ -5,8 +5,12 @@ vector<int> weights;
 int res;
 
 void dfs(int u, vector<int>& path) {
-    res = max(res, weights[u]);
-    for (auto x: path) res = max(res, weights[u] ^ x);
+    int x = weights[u];
+    res = max(res, x);
+    for (int i = path.size() - 1; i >= 0; i --) {
+        x ^= weights[i];
+        res = max(res, x);
+    }
     path.push_back(weights[u]);
     for (auto v: graphs[u]) {
         dfs(v, path);
