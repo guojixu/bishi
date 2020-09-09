@@ -1,51 +1,43 @@
-def kmp(mom_string, son_string):
-    pos1 = []
-    test = ''
-    if type(mom_string) != type(test) or type(son_string) != type(test):
-        pos1.append(-1)
-        return pos1
-    if len(son_string) == 0:
-        pos1.append(0)
-        return pos1
-    if len(mom_string) == 0:
-        pos1.append(-1)
-        return pos1
-    next = [-1] * len(son_string)
-    if len(son_string) > 1:
-        next[1] = 0
-        i, j = 1, 0
-        while i < len(son_string) - 1:
-            if j == -1 or son_string[i] == son_string[j]:
-                i += 1
-                j += 1
-                next[i] = j
-            else:
-                j = next[j]
-    m = s = 0
-    while (s < len(son_string) and m < len(mom_string)):
-        if s == -1 or mom_string[m] == son_string[s]:
-            m += 1
-            s += 1
-        else:
-            s = next[s]
+#include <bits/stdc++.h>
+using namespace std;
+unordered_map<int, vector<int>> graphs;
+vector<int> weights;
+int res;
 
-    if s == len(son_string):
-        pos1.append(m - s)
-    pos1.append(-1)
-    return pos1
+void dfs(int u, vector<int>& path) {
+    res = max(res, weights[u]);
+    for (auto x: path) res = max(res, weights[u] ^ x);
+    path.push_back(weights[u]);
+    for (auto v: graphs[u]) {
+        dfs(v, path);
+    }
+    path.pop_back();
+}
 
+int main() {
+    int n;
+    cin >> n;
+    weights = vector<int>(n + 1);
+    vector<bool> has_fathers(n + 1, false);
 
-k = int(input())
-pat1 = "".join(input().strip().split())
-pat2 = "".join(input().strip().split())
-n = int(input())
-st1 = "".join(input().strip().split())
-st2 = "".join(input().strip().split())
+    for (int i = 0; i < n; i ++) {
+        int id, weight, left, right;
+        cin >> id >> weight >> left >> right;
+        weights[id] = weight;
+        if (left != -1) graphs[id].push_back(left), has_fathers[left] = true;
+        if (right != -1) graphs[id].push_back(right), has_fathers[right] = true;
+    }
 
-pos11 = kmp(st1, pat1)
-pos22 = kmp(st2, pat2)
-k = [i for i in pos11 if i in pos22 and i != -1]
-if len(k) == 0:
-    print(0)
-else:
-    print(k[0] + 1)
+    int root = 1;
+    for (int i = 1; i <= n; i ++) {
+        if (!has_fathers[i]) {
+            root = i;
+            break;
+        }
+    }
+
+    vector<int> path;
+    dfs(root, path);
+    cout << res << endl;
+    return 0;
+}
