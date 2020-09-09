@@ -1,18 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
-unordered_map<int, vector<int>> graphs;
-vector<int> weights;
+unordered_map<int, vector<int>> mp;
+vector<int> w;
 int res;
 
 void dfs(int u, vector<int>& path) {
-    int x = weights[u];
+    int x = w[u];
     res = max(res, x);
     for (int i = path.size() - 1; i >= 0; i --) {
-        x ^= weights[i];
+        x ^= w[i];
         res = max(res, x);
     }
-    path.push_back(weights[u]);
-    for (auto v: graphs[u]) {
+    path.push_back(w[u]);
+    for (auto v: mp[u]) {
         dfs(v, path);
     }
     path.pop_back();
@@ -21,15 +21,15 @@ void dfs(int u, vector<int>& path) {
 int main() {
     int n;
     cin >> n;
-    weights = vector<int>(n + 1);
+    w = vector<int>(n + 1);
     vector<bool> has_fathers(n + 1, false);
 
-    for (int i = 0; i < n; i ++) {
+    for(int i=0;i<n;i++) {
         int id, weight, left, right;
         cin >> id >> weight >> left >> right;
-        weights[id] = weight;
-        if (left != -1) graphs[id].push_back(left), has_fathers[left] = true;
-        if (right != -1) graphs[id].push_back(right), has_fathers[right] = true;
+        w[id] = weight;
+        if (left != -1) mp[id].push_back(left), has_fathers[left] = true;
+        if (right != -1) mp[id].push_back(right), has_fathers[right] = true;
     }
 
     int root = 1;
@@ -39,7 +39,6 @@ int main() {
             break;
         }
     }
-
     vector<int> path;
     dfs(root, path);
     cout << res << endl;
