@@ -1,25 +1,39 @@
-import re
+res = 0
+from collections import defaultdict
 
-K = int(input())
-a = input().replace(" ", "")
-b = input().replace(" ", "")
+
+def dfs(u, path: list):
+    global res
+    x = w[u]
+    res = max(res, x)
+    for i in range(len(path) - 1, -1, -1):
+        x ^= w[i]
+        res = max(res, x)
+    path.append(w[u])
+    for v in mp[u]:
+        dfs(v, path)
+    path.pop()
+
+
 N = int(input())
-c = input().replace(" ", "")
-d = input().replace(" ", "")
-s1, s2 = set(), set()
-for x in re.finditer(a, c):
-    s1.add(x.start())
-for y in re.finditer(b, d):
-    s2.add(y.start())
-ans = s1 & s2
-if not ans:
-    print(0)
-else:
-    print(min(ans)+1)
+w = [0] * (N + 1)
+mp = defaultdict(list)
+has_father = [False] * (N + 1)
+for _ in range(N):
+    id, weight, left, right = [int(_) for _ in input().split()]
+    w[id] = weight
+    if left != -1:
+        mp[id].append(left)
+        has_father[left] = True
+    if right != -1:
+        mp[id].append(right)
+        has_father[right] = True
 
-# 3
-# 1 2 3
-# 3 2 1
-# 6
-# 1 2 1 2 3 3
-# 5 4 3 2 1 1
+root = None
+for i in range(1, N + 1):
+    if not has_father[i]:
+        root = i
+        break
+path = []
+dfs(root, path)
+print(res)
