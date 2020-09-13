@@ -9,23 +9,23 @@ for _ in range(m):
     mp[u][v] = time
 s, e, start = input().split()
 s, e = int(s), int(e)
+
+
 def dijkstra():
-    dist = [float('inf')] * (n + 1)
-    dist[s] = 0
-    visited = set()
+    dist = {}
     tmp = []
     heapq.heappush(tmp, (0, s))
     while tmp:
         t, u = heapq.heappop(tmp)
-        if u in visited:
+        if u in dist:
             continue
-        visited.add(u)
+        dist[u] = t
+        if u == e:
+            return dist[e]
         for v in mp[u]:
-            if dist[u] + mp[u][v] < dist[v]:
-                dist[v] = dist[u] + mp[u][v]
-                heapq.heappush(tmp, (dist[v], v))
-
-    return dist[e]
+            if v not in dist:
+                heapq.heappush(tmp, (dist[u] + mp[u][v], v))
+    return -1
 
 
 cur_year = "2020"
