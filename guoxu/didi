@@ -3,29 +3,25 @@ import datetime
 from collections import defaultdict
 
 n, m = [int(_) for _ in input().split()]
-mp = defaultdict(dict)
+mp = defaultdict(list)
 for _ in range(m):
     u, v, time = [int(_) for _ in input().split()]
-    mp[u][v] = time
+    mp[u].append((v, time))
 s, e, start = input().split()
 s, e = int(s), int(e)
 
 
 def dijkstra():
+    pq = [(0, s)]
     dist = {}
-    tmp = []
-    heapq.heappush(tmp, (0, s))
-    while tmp:
-        t, u = heapq.heappop(tmp)
-        if u in dist:
-            continue
-        dist[u] = t
-        if u == e:
-            return dist[e]
-        for v in mp[u]:
-            if v not in dist:
-                heapq.heappush(tmp, (dist[u] + mp[u][v], v))
-    return -1
+    while pq:
+        d, node = heapq.heappop(pq)
+        if node in dist: continue
+        dist[node] = d
+        for nei, d2 in mp[node]:
+            if nei not in dist:
+                heapq.heappush(pq, (d + d2, nei))
+    return dist[e]
 
 
 cur_year = "2020"
