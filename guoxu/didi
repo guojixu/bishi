@@ -53,21 +53,25 @@ def prim():
             return False
         vis[u] = True
         ret += e
-        for v in mp[u]:
+        for v, w in mp[u]:
             if not vis[v]:
-                q.put((mp[u][v], v))
+                q.put((w, v))
     if all(vis):
         return True
     else:
         return False
 
 
+ans = []
 T = int(input())
 for _ in range(T):
     n, m, k = [int(_) for _ in input().split()]
-    mp = defaultdict(dict)
+    mp = defaultdict(list)
     for _ in range(m):
         u, v, w = [int(_) for _ in input().split()]
-        mp[u][v] = w
-        mp[v][u] = w
-    print(prim())
+        mp[u].append((v, w))
+        mp[v].append((u, w))
+    if prim():
+        print("Yes")
+    else:
+        print("No")
