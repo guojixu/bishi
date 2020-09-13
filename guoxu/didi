@@ -32,3 +32,42 @@ delta = datetime.timedelta(hours=hours)
 d += delta
 # print(datetime.datetime.strftime(d, "%-m.%-d/%H"))
 print("{}.{}/{}".format(d.month, d.day, d.hour))
+
+
+
+from queue import PriorityQueue
+from collections import defaultdict
+
+
+def prim():
+    q = PriorityQueue()
+    vis = [False for _ in range(n + 1)]
+    vis[0] = True
+    q.put((0, 1))
+    ret = 0
+    while not q.empty():
+        e, u = q.get()
+        if vis[u]:
+            continue
+        if e > k:
+            return False
+        vis[u] = True
+        ret += e
+        for v in mp[u]:
+            if not vis[v]:
+                q.put((mp[u][v], v))
+    if all(vis):
+        return True
+    else:
+        return False
+
+
+T = int(input())
+for _ in range(T):
+    n, m, k = [int(_) for _ in input().split()]
+    mp = defaultdict(dict)
+    for _ in range(m):
+        u, v, w = [int(_) for _ in input().split()]
+        mp[u][v] = w
+        mp[v][u] = w
+    print(prim())
