@@ -1,0 +1,20 @@
+#2
+n, m = [int(_) for _ in input().split()]
+
+nums = [[i] for i in range(n)]
+mp = {i: i for i in range(n)}
+for _ in range(m):
+    ch, a, b = input().split()
+    a = int(a) - 1
+    b = int(b) - 1
+    if ch == "C":
+        tmp = nums[a][:]
+        nums[a].clear()
+        nums[b].extend(tmp)
+        for x in tmp:
+            mp[x] = b
+    else:
+        if mp[a] == mp[b]:
+            print(abs(nums[mp[a]].index(a)) - nums[mp[a]].index(b) - 1)
+        else:
+            print(-1)
