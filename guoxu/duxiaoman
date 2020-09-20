@@ -1,37 +1,31 @@
-#
-from collections import defaultdict
+class TreeAncestor:
 
+    def __init__(self, n: int, parent):
+        self.cols = 20  # log(50000) < 20
 
-def dfs(u, father):
-    depth[u] = depth[father] + 1
-    f[u][0] = father
-    for i in range(1, 21):
-        f[u][i] = f[f[u][i - 1]][i - 1]
-    for v in mp[u]:
-        if v != father:
-            dfs(v, u)
+        self.dp = [[-1] * self.cols for _ in range(n)]
+        for i in range(n):
+            self.dp[i][0] = parent[i]
+        # 动态规划设置祖先, dp[node][j] 表示 node 往前推第 2^j 个祖先
+        for j in range(1, self.cols):
+            for i in range(n):
+                if self.dp[i][j - 1] != -1:
+                    self.dp[i][j] = self.dp[self.dp[i][j - 1]][j - 1]
+        return
 
-
-def get_father(x, k):
-    t = depth[x] - k
-    for i in range(20, -1, -1):
-        if depth[f[x][i]] > t:
-            x = f[x][i]
-    return f[x][0]
+    def getKthAncestor(self, node: int, k: int) -> int:
+        for i in range(self.cols - 1, -1, -1):
+            if k & (1 << i):
+                node = self.dp[node][i]
+                if node == -1:
+                    break
+        return node
 
 
 if __name__ == '__main__':
     n, q = [int(_) for _ in input().split()]
-    f = [[0] * 21 for _ in range(n + 1)]
-    depth = [-1] * (n + 1)
-    mp = defaultdict(list)
-    fathers = [int(_) for _ in input().split()]
-    for i in range(n - 1):
-        mp[i + 2].append(fathers[i])
-        mp[fathers[i]].append(i + 2)
-    queries = []
+    parent = [-1] + [int(_) - 1 for _ in input().split()]
+    ta = TreeAncestor(n, parent)
     for _ in range(q):
-        queries.append([int(_) for _ in input().split()])
-    dfs(1, 0)
-    for x, k in queries:
-        print(get_father(x, k))
+        x, k = [int(_) for _ in input().split()]
+        print(ta.getKthAncestor(x - 1, k) + 1)
