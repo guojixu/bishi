@@ -1,0 +1,21 @@
+#2 from itertools import combinations
+
+
+def helper():
+    for comb in combinations(nums, m):
+        flag = True
+        for i in range(m):
+            for j in range(i):
+                if (comb[i] + comb[j]) % k:
+                    flag = False
+                    break
+        if flag:
+            return "Yes"
+    return "No"
+
+
+T = int(input())
+for _ in range(T):
+    n, m, k = [int(_) for _ in input().split()]
+    nums = [int(_) for _ in input().split()]
+    print(helper())
