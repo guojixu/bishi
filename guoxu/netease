@@ -1,3 +1,15 @@
+# 1
+n = int(input())
+s = set()
+mp = {}
+for i in range(1, n + 1):
+    tmp = tuple(set(_ for _ in input().split()))
+    if tmp in mp:
+        print(mp[tmp], i)
+    mp[tmp] = i
+
+
+
 # 2
 s = input()
 n = len(s)
