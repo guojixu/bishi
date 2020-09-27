@@ -42,18 +42,20 @@ print(ans)
 
 # 4
 class Solution:
-    def splitArray(self, nums: List[int], m: int) -> int:
-        n = len(nums)
-        f = [[10**18] * (m + 1) for _ in range(n + 1)]
-        sub = [0]
-        for elem in nums:
-            sub.append(sub[-1] + elem)
-        
-        f[0][0] = 0
-        for i in range(1, n + 1):
-            for j in range(1, min(i, m) + 1):
-                for k in range(i):
-                    f[i][j] = min(f[i][j], max(f[k][j - 1], sub[i] - sub[k]))
-        
-        return f[n][m]
+    def maxSumAfterPartitioning(self, A: List[int], K: int) -> int:
+        n = len(A)
+        dp = [0] * (n+1)
+        for i in range(1,n+1):
+            j = i - 1
+            mx = -float('inf')
+            while i - j <= K and j >= 0:
+                mx = max(mx,A[j])
+                dp[i] = max(dp[i],dp[j]+mx * (i - j))
+                j -= 1
+        return dp[n]
+
+作者：1033020837
+链接：https://leetcode-cn.com/problems/partition-array-for-maximum-sum/solution/dong-tai-gui-hua-qiu-jie-by-1033020837-2/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
