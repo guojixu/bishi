@@ -1,0 +1,10 @@
+# 2
+s = input()
+n = len(s)
+l = None
+ans = None
+for i in range(n, 0, -1):
+    if n // i * s[:i] == s:
+        l = n // i
+        ans = s[:i]
+print("{}{}".format(l, ans))
