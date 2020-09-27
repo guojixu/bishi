@@ -41,21 +41,21 @@ for r in range(n):
 print(ans)
 
 # 4
-class Solution:
-    def maxSumAfterPartitioning(self, A: List[int], K: int) -> int:
-        n = len(A)
-        dp = [0] * (n+1)
-        for i in range(1,n+1):
-            j = i - 1
-            mx = -float('inf')
-            while i - j <= K and j >= 0:
-                mx = max(mx,A[j])
-                dp[i] = max(dp[i],dp[j]+mx * (i - j))
-                j -= 1
-        return dp[n]
+def maxSumAfterPartitioning3(self, A, K) :
+        n=len(A)
+        res=[0]*(n+1)
+        for i in range(1,n+1) :
+            j=i-1
+            mx=float("-inf")
+            while i-j <= K and j >= 0 :
+                #由于不知道lastSubA的大小，因此对lastSubA的所有可能都进行计算，取最大的
+                mx=max(mx,A[j])
+                res[i]=max(res[i],res[j]+mx*(i-j)) 
+                j-=1
+        return res[n]
 
-作者：1033020837
-链接：https://leetcode-cn.com/problems/partition-array-for-maximum-sum/solution/dong-tai-gui-hua-qiu-jie-by-1033020837-2/
+作者：aabathur
+链接：https://leetcode-cn.com/problems/partition-array-for-maximum-sum/solution/dong-tai-gui-hua-si-xiang-jie-jue-wen-ti-by-aabath/
 来源：力扣（LeetCode）
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
