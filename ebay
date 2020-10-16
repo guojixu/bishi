@@ -1,34 +1,59 @@
-class Solution {
-public:
-    bool isValid(string s) {
-        stack<char> myStack;
-        for(int i = 0; i < s.size(); i++) {
-            if(s[i] == '(' || s[i] == '{' || s[i] == '[') {
-                myStack.push(s[i]);
-            } else {
-                if(myStack.empty()) {
-                    return false;
-                }
-                char ch = myStack.top();
-                myStack.pop();
-                if(s[i] == ')') {
-                    if(ch != '(') {
-                        return false;
-                    }
-                } else if(s[i] == ']') {
-                    if(ch != '[') {
-                        return false;
-                    }
-                } else {
-                    if(ch != '{') {
-                        return false;
-                    }
-                }
-            }
+//
+// Created by 王张苏徽 on 2020/10/16.
+//
+
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+#include <stack>
+using namespace std;
+
+void test() {
+    int n, m;
+    cin >> n >> m;
+    vector<int> nums(n, 0);
+    while(m--) {
+        int a, b, c;
+        cin >> a >> b >> c;
+        for(int i = a - 1; i <= b-1; i++) {
+            nums[i] += c;
         }
-        if(!myStack.empty()) {
-            return false;
-        }
-        return true;
     }
-};
+    for(int num: nums) {
+        cout << num << " ";
+    }
+}
+
+string isValid(string s) {
+    int n = s.size();
+    if(n % 2 == 1) {
+        return "No";
+    }
+    unordered_map<char, char> pairs = {
+            {')', '('}, {']', '['}, {'}', '{'}
+    };
+    stack<char> stk;
+    for(char ch: s) {
+        if(pairs.count(ch)) {
+            if(stk.empty() || stk.top() != pairs[ch]) {
+                return "No";
+            }
+            stk.pop();
+        } else {
+            stk.push(ch);
+        }
+    }
+    string ans = stk.empty() ? "Yes" : "No";
+    return ans;
+}
+
+int main() {
+    int n;
+    cin >> n;
+    while(n--) {
+        string s;
+        cin >> s;
+        cout << isValid(s) << endl;
+    }
+
+}
